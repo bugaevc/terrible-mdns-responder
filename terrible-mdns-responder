@@ -1,0 +1,60 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          terrible-mdns-responder
+# Required-Start:    $network
+# Required-Stop:     $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Terrible mDNS responder
+# Description:       A very bad, no good mDNS responder implementation.
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC="Terrible mDNS responder"
+NAME="terrible-mdns-responder"
+DAEMON="/usr/local/sbin/$NAME"
+SCRIPTNAME="/etc/init.d/$NAME"
+PIDFILE="/var/run/$NAME.pid"
+
+test -x "$DAEMON" || exit 0
+
+. /lib/lsb/init-functions
+
+case "$1" in
+    start)
+        log_daemon_msg "Starting $DESC" "$NAME"
+        start-stop-daemon --start --quiet --oknodo \
+                         --make-pidfile --pidfile "$PIDFILE" \
+                         --chuid nobody:nogroup \
+                         --background \
+                         --exec "$DAEMON"
+        log_end_msg $?
+        ;;
+    stop)
+        log_daemon_msg "Stopping $DESC" "$NAME"
+        start-stop-daemon --stop --quiet --oknodo \
+                         --remove-pidfile --pidfile "$PIDFILE" \
+                         --exec "$DAEMON"
+        log_end_msg $?
+        ;;
+    restart)
+        log_daemon_msg "Restarting $DESC" "$NAME"
+        start-stop-daemon --stop --quiet --oknodo \
+                         --remove-pidfile --pidfile "$PIDFILE" \
+                         --exec "$DAEMON"
+        start-stop-daemon --start --quiet --oknodo \
+                         --make-pidfile --pidfile "$PIDFILE" \
+                         --chuid nobody:nogroup \
+                         --background \
+                         --exec "$DAEMON"
+        ;;
+    status)
+        status_of_proc -p "$PID" "$DAEMON" "$NAME"
+        ;;
+    *)
+        echo "Usage: $SCRIPTNAME {start|stop|restart|status}" >&2
+        exit 3
+        ;;
+esac
+
+exit 0
