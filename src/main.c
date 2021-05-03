@@ -58,6 +58,11 @@ int main(int argc, const char *argv[]) {
         error(1, errno, "failed to bind to 0.0.0.0:%d", MDNS_PORT);
     }
 
+    unsigned char zero = 0;
+    rc = setsockopt(socket_fd, IPPROTO_IP, IP_MULTICAST_LOOP, &zero, 1);
+    if (rc < 0) {
+        error(0, errno, "failed to disable multicast loopback");
+    }
     struct ip_mreq mreq = {
         .imr_multiaddr = MDNS_MULTICAST_ADDR,
         .imr_interface = { htonl(INADDR_ANY) },
