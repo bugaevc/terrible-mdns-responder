@@ -12,7 +12,7 @@
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 DESC="Terrible mDNS responder"
 NAME="terrible-mdns-responder"
-DAEMON="/usr/local/sbin/$NAME"
+DAEMON=@DAEMON_PATH@
 SCRIPTNAME="/etc/init.d/$NAME"
 PIDFILE="/var/run/$NAME.pid"
 
