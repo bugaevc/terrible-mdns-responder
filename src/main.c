@@ -63,6 +63,17 @@ int main(int argc, const char *argv[]) {
     if (rc < 0) {
         error(0, errno, "failed to disable multicast loopback");
     }
+
+    unsigned char ip_ttl = 255;
+    rc = setsockopt(socket_fd, IPPROTO_IP, IP_TTL, &ip_ttl, 1);
+    if (rc < 0) {
+        error(0, errno, "Failed to set IP TTL to 255");
+    }
+    rc = setsockopt(socket_fd, IPPROTO_IP, IP_MULTICAST_TTL, &ip_ttl, 1);
+    if (rc < 0) {
+        error(0, errno, "Failed to set IP multicast TTL to 255");
+    }
+
     struct ip_mreq mreq = {
         .imr_multiaddr = MDNS_MULTICAST_ADDR,
         .imr_interface = { htonl(INADDR_ANY) },
