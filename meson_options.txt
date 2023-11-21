@@ -1,0 +1,3 @@
+option('systemd',
+    type: 'feature',
+    value: 'auto')

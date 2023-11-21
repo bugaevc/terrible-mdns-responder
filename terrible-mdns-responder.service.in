@@ -1,0 +1,14 @@
+[Unit]
+Description=Terrible mDNS Responder
+Documentation=https://github.com/bugaevc/terrible-mdns-responder
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=@DAEMON_PATH@
+DynamicUser=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+
+[Install]
+WantedBy=multi-user.target
